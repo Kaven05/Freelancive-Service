@@ -1,98 +1,78 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
 
-// Sample job data (replace with actual API later)
-// const job = {
-//   j1: {
-//     title: "Frontend Developer",
-//     description: "We’re looking for a skilled React developer.",
-//     skills: ["React", "HTML", "CSS"]
-//   },
-//   j2: {
-//     title: "Data Scientist",
-//     description: "Experience in Python and Machine Learning required.",
-//     skills: ["Python", "ML", "Data Analysis"]
-//   }
-// };
-
 const ApplyJob = () => {
   const Navigate = useNavigate();
   const { id } = useParams();
-  const [job,setJobs] = useState({
+  const [job, setJobs] = useState({
     title: "",
     description: "",
-    skills: []
+    skills: [],
   });
-const [form,setForm] = useState({activityId:""})
-
-useEffect(() => {
-  const fetchJobs = async () => {
-    try {
-      const res = await fetch(`https://freelancive-service-backend.onrender.com/api/activity/${id}`, {
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
-      console.log("Fetched jobs:", data);
-      setJobs(data.data || []);
-      
-      form.activityId=data.data._id
-      console.log("Form data:",form);
-    } catch (err) {
-      console.error("Error fetching jobs:", err);
-    }
-  };
-  fetchJobs();
-}, []);
-
+  const [form, setForm] = useState({ activityId: "" });
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const res = await fetch(
+          `https://freelancive-service-backend.onrender.com/api/activity/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await res.json();
+        setJobs(data.data || []);
+        formData.activityId = data.data._id;
+        console.log("Form data:", form);
+      } catch (err) {
+        console.error("Error fetching jobs:", err);
+      }
+    };
+    fetchJobs();
+  }, []);
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
-    resume: null
+    resume: null,
+    activityId: "",
   });
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setFormData({
       ...formData,
-      [name]: files ? files[0] : value
+      [name]: files ? files[0] : value,
     });
   };
 
-
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const res=await fetch("https://freelancive-service-backend.onrender.com/api/request", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      }, 
-      body: JSON.stringify(form)
-    });
+    const res = await fetch(
+      "https://freelancive-service-backend.onrender.com/api/request",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
     const data = await res.json();
-    console.log("Response data:", data);  
+    console.log("Response data:", data);
 
-   
-    if(res.status === 201){
+    if (res.status === 201) {
       alert("Application submitted successfully!");
       Navigate("/home");
-    }else{
+    } else {
       alert("Failed to submit application. Please try again.");
     }
-    // For demonstration, we'll just log the data
-    // and show a success message
-    // console.log("Application data:", applicationData);
-    // For demonstration, we'll just log the data
-    // and show a success message
-    console.log("Applied with:", formData);
-   
   };
 
   if (!job) return <p className="text-white">Job not found.</p>;
@@ -107,10 +87,9 @@ useEffect(() => {
 
         <h3 className="font-semibold text-purple-700 mb-2">Required Skills</h3>
         <div className="flex gap-2 mb-6">
-            <span
-              className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
-              {job.skills}
-            </span>
+          <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
+            {job.skills}
+          </span>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -130,7 +109,8 @@ useEffect(() => {
             value={formData.email}
             onChange={handleChange}
             // not required
-            className="w-full px-4 py-2 border rounded-md"/>
+            className="w-full px-4 py-2 border rounded-md"
+          />
           <textarea
             name="message"
             placeholder="Why are you a good fit?"
@@ -148,7 +128,8 @@ useEffect(() => {
           />
           <button
             type="submit"
-            className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700">
+            className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700"
+          >
             Submit Application
           </button>
         </form>

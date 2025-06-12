@@ -1,6 +1,7 @@
 const Request = require("../models/requestModel");
 const Activity = require("../models/activityModel");
-
+const User = require("../models/userModel");
+const nodemailer = require("nodemailer");
 exports.getAllRequestByOwner = async (req, res) => {
   try {
     const strictIdRegex = /^[0-9a-fA-F]{24}$/;
@@ -34,6 +35,7 @@ exports.addRequest = async (req, res) => {
     if (!req.body.activityId || !req.body.activityId.match(/^[0-9a-fA-F]{24}$/)) {
       return res.status(404).json({ status: "Invalid details", data: req.body });
     }
+    
     const activityId=req.body.activityId;
     const activity = await Activity.findById(activityId);
     if (!activity) {
@@ -46,10 +48,36 @@ exports.addRequest = async (req, res) => {
       userId: req.user.id,
       activityId: activityId,
     });
+
+    const email=await User.findById(activity.ownerId, { email: 1 });
+    console.log("e:",email);
+    const transporter= nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: 'ravenrox07@gmail.com',
+            pass: 'kavin12345678'
+          }
+        });
+        const mailOptions = {
+          from: 'No Reply <ravenrox07@gmail.com>',
+          to: email.email, 
+          subject: 'New Job Application',
+          data: {
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            resume: formData.resume
+          }
+        };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) return console.error(error);
+      console.log('Email sent: ' + info.response);
+    });
+
     if (!newRequest) {
       return res.status(404).json({ status: "Invalid" });
     }
-    // Increment the count of requests in the activity
+ 
     await Activity.findByIdAndUpdate(activityId, { $inc: { count: 1 } });
     
     res.status(201).json({
