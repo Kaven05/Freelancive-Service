@@ -10,7 +10,7 @@ const MyJobs = () => {
   useEffect(() => {
     const fetchMyJobs = async () => {
       const response = await fetch(
-        "http://localhost:5000/api/activity/myjobs",
+        "https://freelancive-service-backend.onrender.com/api/activity/myjobs",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

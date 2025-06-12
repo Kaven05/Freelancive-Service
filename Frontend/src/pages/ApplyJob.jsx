@@ -30,7 +30,7 @@ const [form,setForm] = useState({activityId:""})
 useEffect(() => {
   const fetchJobs = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/activity/${id}`, {
+      const res = await fetch(`https://freelancive-service-backend.onrender.com/api/activity/${id}`, {
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
@@ -68,7 +68,7 @@ useEffect(() => {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    const res=await fetch("http://localhost:5000/api/request", {
+    const res=await fetch("https://freelancive-service-backend.onrender.com/api/request", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`,

@@ -5,7 +5,7 @@ import Navbar from "../components/navbar";
 const UserPage = () => {
   const fetchUserData = async () => {
     try {
-      const data = await fetch("http://localhost:5000/api/user", {
+      const data = await fetch("https://freelancive-service-backend.onrender.com/api/user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

@@ -29,7 +29,7 @@ export default function SignUp() {
       return;
     }
     try {
-      const res = await fetch("http://localhost:5000/api/user/signup", {
+      const res = await fetch("https://freelancive-service-backend.onrender.com/api/user/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -20,7 +20,7 @@ export default function SignIn() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/user/signin", {
+      const response = await fetch("https://freelancive-service-backend.onrender.com/api/user/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

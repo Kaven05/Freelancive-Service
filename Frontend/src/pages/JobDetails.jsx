@@ -13,7 +13,7 @@ const JobDetails = () => {
 
   const fetchUserData = async (userid) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/user/${userid}`, {
+      const res = await fetch(`https://freelancive-service-backend.onrender.com/api/user/${userid}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -29,10 +29,9 @@ const JobDetails = () => {
   };
 
   useEffect(() => {
-
     const fetchJob = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/activity/${id}`, {
+        const res = await fetch(`https://freelancive-service-backend.onrender.com/api/activity/${id}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -53,7 +52,7 @@ const JobDetails = () => {
     
     const fetchJobAndApplicants = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/request/${id}`, {
+        const res = await fetch(`https://freelancive-service-backend.onrender.com/api/request/${id}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

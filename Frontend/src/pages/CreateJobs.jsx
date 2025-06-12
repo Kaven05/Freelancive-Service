@@ -15,7 +15,7 @@ const navigate = useNavigate();
   const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-    const res= await fetch("http://localhost:5000/api/activity", {
+    const res= await fetch("https://freelancive-service-backend.onrender.com/api/activity", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
