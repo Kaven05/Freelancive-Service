@@ -2,7 +2,7 @@ const Request = require("../models/requestModel");
 const Activity = require("../models/activityModel");
 const User = require("../models/userModel");
 const nodemailer = require("nodemailer");
-const { Resend } = require('resend');
+const { Resend } = require("resend");
 
 exports.getAllRequestByOwner = async (req, res) => {
   try {
@@ -21,13 +21,13 @@ exports.getAllRequestByOwner = async (req, res) => {
     }
     const doc = await Request.find(
       { activityId: id },
-      { userId: 1 ,_id:0},
+      { userId: 1, _id: 0 },
       { unique: true }
     );
     if (!doc) {
       return res.status(404).json({ status: "not found" });
     }
-    res.status(201).json({ status: "success", data:  doc  });
+    res.status(201).json({ status: "success", data: doc });
   } catch (error) {
     res.status(404).json({ status: "error", data: { error } });
   }
@@ -35,16 +35,23 @@ exports.getAllRequestByOwner = async (req, res) => {
 
 exports.addRequest = async (req, res) => {
   try {
-    if (!req.body.activityId || !req.body.activityId.match(/^[0-9a-fA-F]{24}$/)) {
-      return res.status(404).json({ status: "Invalid details", data: req.body });
+    if (
+      !req.body.activityId ||
+      !req.body.activityId.match(/^[0-9a-fA-F]{24}$/)
+    ) {
+      return res
+        .status(404)
+        .json({ status: "Invalid details", data: req.body });
     }
-    
-    const activityId=req.body.activityId;
+
+    const activityId = req.body.activityId;
     const activity = await Activity.findById(activityId);
     if (!activity) {
-      return res.status(404).json({ status: "Invalid details", data: req.body });
+      return res
+        .status(404)
+        .json({ status: "Invalid details", data: req.body });
     }
-    if(activity.ownerId == req.user.id) {
+    if (activity.ownerId == req.user.id) {
       return res.status(404).json({ status: "Can't apply", data: req.body });
     }
     const newRequest = await Request.create({
@@ -52,55 +59,54 @@ exports.addRequest = async (req, res) => {
       activityId: activityId,
     });
 
-    const email=await User.findById(activity.ownerId, { email: 1 });
-    
+    const email = await User.findById(activity.ownerId, { email: 1 });
 
-// const emailid=process.env.EMAILID;
-// const emailpass=process.env.EMAILPASS;
-// const transporter = nodemailer.createTransport({
-//  host: "send.api.mailtrap.io",
-//   port: 2525,
-//   auth: {
-//     user: emailid,
-//     pass: emailpass,
-//   }
-// });
+    // const emailid=process.env.EMAILID;
+    // const emailpass=process.env.EMAILPASS;
+    // const transporter = nodemailer.createTransport({
+    //  host: "send.api.mailtrap.io",
+    //   port: 2525,
+    //   auth: {
+    //     user: emailid,
+    //     pass: emailpass,
+    //   }
+    // });
 
-// console.log("To email:", email.email,req.body);
+    // console.log("To email:", email.email,req.body);
 
-// let info = await transporter.sendMail({
-//   from: 'info@mailtrap.com',
-//   to: '126014022@sastra.ac.in', 
-//   subject: 'New Job Application',
-//     text: `New job application received!
-//   Name: ${req.body.name}
-//   Email: ${req.body.email}
-//   Message: ${req.body.message}
-//   Resume: ${req.body.resume || 'No resume provided'}`
-// });
-// console.log("Message sent: %s", info.messageId);
+    // let info = await transporter.sendMail({
+    //   from: 'info@mailtrap.com',
+    //   to: '126014022@sastra.ac.in',
+    //   subject: 'New Job Application',
+    //     text: `New job application received!
+    //   Name: ${req.body.name}
+    //   Email: ${req.body.email}
+    //   Message: ${req.body.message}
+    //   Resume: ${req.body.resume || 'No resume provided'}`
+    // });
+    // console.log("Message sent: %s", info.messageId);
 
-const resend = new Resend('re_EDCdCzLN_PpigtES6cUQqKWJXv9BkPc56');
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-const inf=await resend.emails.send({
-  from: 'Freelancive-service-frontend <onboarding@resend.dev>',
-  to: [email.email], 
-  subject: 'New Job Application',
-  html: `
+    const inf = await resend.emails.send({
+      from: "Freelancive-service-frontend <onboarding@resend.dev>",
+      to: [email.email],
+      subject: "New Job Application",
+      html: `
         <h3>New Job Application</h3>
         <p><strong>Name:</strong> ${req.body.name}</p>
         <p><strong>Email:</strong> ${req.body.email}</p>
         <p><strong>Message:</strong> ${req.body.message}</p>
-        <p><strong>Resume:</strong> ${req.body.resume || 'No resume provided'}</p>
-      `
-});
-console.log("Message sent:", inf);
+        <p><strong>Resume:</strong> ${req.body.resume || "No resume provided"}</p>
+      `,
+    });
+    console.log("Message sent:", inf);
     if (!newRequest) {
       return res.status(404).json({ status: "Invalid" });
     }
- 
+
     await Activity.findByIdAndUpdate(activityId, { $inc: { count: 1 } });
-    
+
     res.status(201).json({
       status: "success",
       data: {
