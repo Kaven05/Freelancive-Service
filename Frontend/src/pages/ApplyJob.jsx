@@ -4,6 +4,7 @@ import Navbar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
 
 const ApplyJob = () => {
+  const url="https://freelancive-service-backend.onrender.com";
   const Navigate = useNavigate();
   const { id } = useParams();
   const [job, setJobs] = useState({
@@ -16,7 +17,7 @@ const ApplyJob = () => {
     const fetchJobs = async () => {
       try {
         const res = await fetch(
-          `https://freelancive-service-backend.onrender.com/api/activity/${id}`,
+          `${url}/api/activity/${id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -54,7 +55,7 @@ const ApplyJob = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await fetch(
-      "https://freelancive-service-backend.onrender.com/api/request",
+        `${url}/api/request` ,
       {
         method: "POST",
         headers: {
@@ -99,7 +100,7 @@ const ApplyJob = () => {
             placeholder="Your Full Name"
             value={formData.name}
             onChange={handleChange}
-            // not required
+            required
             className="w-full px-4 py-2 border rounded-md"
           />
           <input
@@ -108,7 +109,7 @@ const ApplyJob = () => {
             placeholder="Your Email"
             value={formData.email}
             onChange={handleChange}
-            // not required
+            required
             className="w-full px-4 py-2 border rounded-md"
           />
           <textarea
@@ -117,6 +118,7 @@ const ApplyJob = () => {
             value={formData.message}
             onChange={handleChange}
             rows={4}
+            required
             className="w-full px-4 py-2 border rounded-md"
           />
           <input

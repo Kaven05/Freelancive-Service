@@ -2,6 +2,8 @@ const Request = require("../models/requestModel");
 const Activity = require("../models/activityModel");
 const User = require("../models/userModel");
 const nodemailer = require("nodemailer");
+const { Resend } = require('resend');
+
 exports.getAllRequestByOwner = async (req, res) => {
   try {
     const strictIdRegex = /^[0-9a-fA-F]{24}$/;
@@ -19,7 +21,8 @@ exports.getAllRequestByOwner = async (req, res) => {
     }
     const doc = await Request.find(
       { activityId: id },
-      { userId: 1 ,_id:0}
+      { userId: 1 ,_id:0},
+      { unique: true }
     );
     if (!doc) {
       return res.status(404).json({ status: "not found" });
@@ -50,30 +53,48 @@ exports.addRequest = async (req, res) => {
     });
 
     const email=await User.findById(activity.ownerId, { email: 1 });
-    console.log("e:",email);
-    const transporter= nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: 'ravenrox07@gmail.com',
-            pass: 'kavin12345678'
-          }
-        });
-        const mailOptions = {
-          from: 'No Reply <ravenrox07@gmail.com>',
-          to: email.email, 
-          subject: 'New Job Application',
-          data: {
-            name: formData.name,
-            email: formData.email,
-            message: formData.message,
-            resume: formData.resume
-          }
-        };
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) return console.error(error);
-      console.log('Email sent: ' + info.response);
-    });
+    
 
+// const emailid=process.env.EMAILID;
+// const emailpass=process.env.EMAILPASS;
+// const transporter = nodemailer.createTransport({
+//  host: "send.api.mailtrap.io",
+//   port: 2525,
+//   auth: {
+//     user: emailid,
+//     pass: emailpass,
+//   }
+// });
+
+// console.log("To email:", email.email,req.body);
+
+// let info = await transporter.sendMail({
+//   from: 'info@mailtrap.com',
+//   to: '126014022@sastra.ac.in', 
+//   subject: 'New Job Application',
+//     text: `New job application received!
+//   Name: ${req.body.name}
+//   Email: ${req.body.email}
+//   Message: ${req.body.message}
+//   Resume: ${req.body.resume || 'No resume provided'}`
+// });
+// console.log("Message sent: %s", info.messageId);
+
+const resend = new Resend('re_EDCdCzLN_PpigtES6cUQqKWJXv9BkPc56');
+
+const inf=await resend.emails.send({
+  from: 'Freelancive-service-frontend <onboarding@resend.dev>',
+  to: [email.email], 
+  subject: 'New Job Application',
+  html: `
+        <h3>New Job Application</h3>
+        <p><strong>Name:</strong> ${req.body.name}</p>
+        <p><strong>Email:</strong> ${req.body.email}</p>
+        <p><strong>Message:</strong> ${req.body.message}</p>
+        <p><strong>Resume:</strong> ${req.body.resume || 'No resume provided'}</p>
+      `
+});
+console.log("Message sent:", inf);
     if (!newRequest) {
       return res.status(404).json({ status: "Invalid" });
     }
@@ -87,6 +108,7 @@ exports.addRequest = async (req, res) => {
       },
     });
   } catch (err) {
+    console.error("Error in addRequest:", err);
     res.status(404).json({ status: "error", data: { err } });
   }
 };

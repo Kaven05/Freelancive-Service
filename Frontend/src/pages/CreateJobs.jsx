@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
 const CreateJob = () => {
+  const url = "https://freelancive-service-backend.onrender.com";
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -15,7 +16,7 @@ const navigate = useNavigate();
   const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-    const res= await fetch("https://freelancive-service-backend.onrender.com/api/activity", {
+    const res= await fetch(`${url}/api/activity`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
