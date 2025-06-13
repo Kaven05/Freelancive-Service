@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import Navbar from "../components/navbar.jsx"; 
 
 const JobDetails = () => {
+  const url = "https://freelancive-service-backend.onrender.com";
+  // const url = "http://localhost:5000";
   const { id } = useParams();
   const [job, setJob] = useState({
     title: "",
@@ -13,7 +15,7 @@ const JobDetails = () => {
 
   const fetchUserData = async (userid) => {
     try {
-      const res = await fetch(`https://freelancive-service-backend.onrender.com/api/user/${userid}`, {
+      const res = await fetch(`${url}/api/user/${userid}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -21,6 +23,7 @@ const JobDetails = () => {
         },
       });
       const result = await res.json();
+      console.log("User data:", result);
       return result.data.doc;
     } catch (err) {
       console.error("Error fetching user:", err);
@@ -31,7 +34,7 @@ const JobDetails = () => {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const res = await fetch(`https://freelancive-service-backend.onrender.com/api/activity/${id}`, {
+        const res = await fetch(`${url}/api/activity/${id}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -52,7 +55,7 @@ const JobDetails = () => {
     
     const fetchJobAndApplicants = async () => {
       try {
-        const res = await fetch(`https://freelancive-service-backend.onrender.com/api/request/${id}`, {
+        const res = await fetch(`${url}/api/request/${id}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -62,11 +65,10 @@ const JobDetails = () => {
 
         if (res.status === 201) {
           const result = await res.json();
-          const applicantList = result.data || []; 
-
-        
+          console.log("Applicants data:", result.data);
+          const applicantList = result.data;
           const applicantDetails = await Promise.all(
-            applicantList.map(({ userId }) => fetchUserData(userId))
+            applicantList.map(( userId ) => fetchUserData(userId))
           );
           setApplicants(applicantDetails.filter(Boolean));
         } else {

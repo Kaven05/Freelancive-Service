@@ -3,11 +3,13 @@ import Navbar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
 const CreateJob = () => {
   const url = "https://freelancive-service-backend.onrender.com";
+  // const url = "http://localhost:5000";
   const [form, setForm] = useState({
     title: "",
     description: "",
     skills: "",
   });
+  
 const navigate = useNavigate();
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

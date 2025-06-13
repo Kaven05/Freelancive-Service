@@ -19,11 +19,9 @@ exports.getAllRequestByOwner = async (req, res) => {
     if (activity.ownerId != req.user.id) {
       return res.status(404).json({ status: "Not owner", data: {} });
     }
-    const doc = await Request.find(
-      { activityId: id },
-      { userId: 1, _id: 0 },
-      { unique: true }
-    );
+    const doc = await Request.distinct("userId", {
+      activityId: id,
+    })
     if (!doc) {
       return res.status(404).json({ status: "not found" });
     }
@@ -86,24 +84,24 @@ exports.addRequest = async (req, res) => {
     // });
     // console.log("Message sent: %s", info.messageId);
 
-    const resend = new Resend(process.env.RESEND_API_KEY);
+    // const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const inf = await resend.emails.send({
-      from: "Freelancive-service-frontend <onboarding@resend.dev>",
-      to: [email.email],
-      subject: "New Job Application",
-      html: `
-        <h3>New Job Application</h3>
-        <p><strong>Name:</strong> ${req.body.name}</p>
-        <p><strong>Email:</strong> ${req.body.email}</p>
-        <p><strong>Message:</strong> ${req.body.message}</p>
-        <p><strong>Resume:</strong> ${req.body.resume || "No resume provided"}</p>
-      `,
-    });
-    console.log("Message sent:", inf);
-    if (!newRequest) {
-      return res.status(404).json({ status: "Invalid" });
-    }
+    // const inf = await resend.emails.send({
+    //   from: "Freelancive-service-frontend <onboarding@resend.dev>",
+    //   to: '126014022@sastra.ac.in',
+    //   subject: "New Job Application",
+    //   html: `
+    //     <h3>New Job Application</h3>
+    //     <p><strong>Name:</strong> ${req.body.name}</p>
+    //     <p><strong>Email:</strong> ${req.body.email}</p>
+    //     <p><strong>Message:</strong> ${req.body.message}</p>
+    //     <p><strong>Resume:</strong> ${req.body.resume || "No resume provided"}</p>
+    //   `,
+    // });
+    // console.log("Message sent:", inf);
+    // if (!newRequest) {
+    //   return res.status(404).json({ status: "Invalid" });
+    // }
 
     await Activity.findByIdAndUpdate(activityId, { $inc: { count: 1 } });
 

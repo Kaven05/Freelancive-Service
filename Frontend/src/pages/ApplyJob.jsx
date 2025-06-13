@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const ApplyJob = () => {
   const url="https://freelancive-service-backend.onrender.com";
+  // const url = "http://localhost:5000";
   const Navigate = useNavigate();
   const { id } = useParams();
   const [job, setJobs] = useState({
