@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Navbar from "../components/navbar.jsx"; 
+import Navbar from "../components/navbar.jsx";
 
 const JobDetails = () => {
   const url = "https://freelancive-service-backend.onrender.com";
@@ -43,7 +43,7 @@ const JobDetails = () => {
         });
         if (res.status === 201) {
           const result = await res.json();
-          setJob(result.data); 
+          setJob(result.data);
           console.log("Job details:", job);
         } else {
           throw new Error("Failed to fetch job details");
@@ -52,7 +52,7 @@ const JobDetails = () => {
         console.error(err);
       }
     };
-    
+
     const fetchJobAndApplicants = async () => {
       try {
         const res = await fetch(`${url}/api/request/${id}`, {
@@ -68,7 +68,7 @@ const JobDetails = () => {
           console.log("Applicants data:", result.data);
           const applicantList = result.data;
           const applicantDetails = await Promise.all(
-            applicantList.map(( userId ) => fetchUserData(userId))
+            applicantList.map((userId) => fetchUserData(userId))
           );
           setApplicants(applicantDetails.filter(Boolean));
         } else {
@@ -87,7 +87,7 @@ const JobDetails = () => {
     <div className="min-h-screen bg-gradient-to-b from-purple-500 to-blue-500 text-white">
       <Navbar />
       <div className="max-w-4xl mx-auto bg-white text-gray-900 p-8 rounded-xl shadow-xl mt-8">
-        <div className="flex justify-between items-center mb-6">
+        {/* <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold text-purple-700">{job.title}</h2>
           <Link
             to={`/edit-job/${job._id}`}
@@ -95,7 +95,7 @@ const JobDetails = () => {
           >
             Edit Job
           </Link>
-        </div>
+        </div> */}
 
         <p className="mb-4">{job.description}</p>
 
@@ -103,12 +103,12 @@ const JobDetails = () => {
           <p className="text-sm text-gray-600 font-medium">Skills Required:</p>
           <div className="flex gap-2 mt-1">
             {/* {job.skills?.map((skill, i) => ( */}
-              <span
-                // key={i}
-                className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm"
-              >
-                {job.skills}
-              </span>
+            <span
+              // key={i}
+              className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm"
+            >
+              {job.skills}
+            </span>
             {/* ))} */}
           </div>
         </div>
@@ -136,12 +136,12 @@ const JobDetails = () => {
                   ))}
                 </div>
               </div>
-              <Link
+              {/* <Link
                 to={`/user/${user._id}`}
                 className="text-blue-600 hover:underline"
               >
                 View Profile
-              </Link>
+              </Link> */}
             </div>
           ))}
         </div>

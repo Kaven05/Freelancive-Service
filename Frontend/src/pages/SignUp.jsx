@@ -109,7 +109,7 @@ export default function SignUp() {
             <option value="">Select a skill</option>
             <option value="Python">Python</option>
             <option value="ML">ML</option>
-            <option value="Web Development">Web Development</option>
+            {/* <option value="Web Development">Web Development</option> */}
             <option value="Java">Java</option>
           </select>
 
