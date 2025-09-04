@@ -10,12 +10,15 @@ const Home = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await fetch("https://freelancive-service-backend.onrender.com/api/activity", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const res = await fetch(
+          "https://freelancive-service-backend.onrender.com/api/activity",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const data = await res.json();
         console.log("Fetched jobs:", data);
         setJobs(data.data || []);
@@ -31,7 +34,7 @@ const Home = () => {
     <div className="min-h-screen bg-white text-black font-sans">
       <Navbar />
 
-      <div className="p-4">
+      {/* <div className="p-4">
         <div className="flex items-center bg-gray-100 rounded-full px-4 py-2">
           <IoMdSearch className="text-xl text-gray-500 mr-2" />
           <input
@@ -41,10 +44,10 @@ const Home = () => {
           />
           <CiSettings className="text-xl text-purple-700" />
         </div>
-      </div>
+      </div> */}
 
       {/* Categories */}
-      <div className="px-4">
+      {/* <div className="px-4">
         <h2 className="text-lg font-semibold mb-2">Categories</h2>
         <div className="flex space-x-4 overflow-x-auto">
           {["Flutter", "UI/UX", "Backend", "AI/ML"].map((name, index) => (
@@ -56,7 +59,7 @@ const Home = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Recommended Jobs */}
       <div className="px-4 mt-6">
