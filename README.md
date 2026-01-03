@@ -1,9 +1,5 @@
 # Freelancive-Service
 
-[![Frontend](https://img.shields.io/badge/frontend-react-js-blue)](https://freelancive-service-frontend.onrender.com/)  
-[![Backend](https://img.shields.io/badge/backend-nodejs-express-green)]  
-[![Status](https://img.shields.io/badge/status-active-brightgreen)]  
-![License](https://img.shields.io/badge/license-MIT-blue)
 
 **Freelancive-Service** is a full-stack freelancing platform where users can discover and post gigs, hire freelancers, manage projects and collaborate online. It consists of a **React frontend** and **Node.js/Express backend**.
 
