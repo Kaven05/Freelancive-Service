@@ -3,8 +3,8 @@
 
 **Freelancive-Service** is a full-stack freelancing platform where users can discover and post gigs, hire freelancers, manage projects and collaborate online. It consists of a **React frontend** and **Node.js/Express backend**.
 
-🔗 Live Demo: https://freelancive-service-frontend.onrender.com/ :contentReference[oaicite:0]{index=0}  
-📦 Code Repo: https://github.com/Kaven05/Freelancive-Service :contentReference[oaicite:1]{index=1}
+🔗 Live Demo: https://freelancive-service-frontend.onrender.com/  
+📦 Code Repo: https://github.com/Kaven05/Freelancive-Service 
 
 ---
 
@@ -73,6 +73,4 @@ Make sure you have the following installed:
 git clone https://github.com/Kaven05/Freelancive-Service.git
 cd Freelancive-Service
 ```
-
-## 📁 Project Structure
 
